@@ -1,0 +1,8 @@
+To-do:
+- Make so that users can upload their own datasets and models
+- Make a paid version
+- Deduct money for every successful run on the server
+
+Wishlist
+- Actually deploy on GCP or AWS
+
