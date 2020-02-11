@@ -1,5 +1,5 @@
 import os
-from flask import Flask, flash, request, redirect, url_for
+from flask import Flask, flash, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
 
 
@@ -15,7 +15,7 @@ def allowed_file(filename):
 
 @app.route('/')
 def home():
-    return 'Home Page'
+    return render_template('home.html')
 
 @app.route('/defaults')
 def run_script():
