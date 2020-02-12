@@ -19,8 +19,9 @@ def home():
 
 @app.route('/defaults')
 def run_script():
-    import send
-    return send.send_data()
+    return render_template('defaults.html')
+    #import send
+    #return send.send_data()
 
 @app.route('/configurable', methods=['GET', 'POST'])
 def upload_file():
