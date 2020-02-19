@@ -1,4 +1,4 @@
-def send_data():
+def predictions(time =30):
     from tensorflow import keras
 
     regressor = keras.models.load_model('RNN.h5')
@@ -8,6 +8,7 @@ def send_data():
     import pandas as pd 
     import matplotlib
     from matplotlib import pyplot as plt
+    from sklearn.preprocessing import MinMaxScaler
 
     # Import the dataset and encode the date
     df = pd.read_csv('coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.csv')
@@ -16,20 +17,18 @@ def send_data():
     Real_Price = group['Weighted_Price'].mean()
 
     # split data
-    prediction_days = 30
+    prediction_days = int(time)
     df_train= Real_Price[:len(Real_Price)-prediction_days]
     df_test= Real_Price[len(Real_Price)-prediction_days:]
 
     # Data preprocess
     training_set = df_train.values
     training_set = np.reshape(training_set, (len(training_set), 1))
-    from sklearn.preprocessing import MinMaxScaler
     sc = MinMaxScaler()
     training_set = sc.fit_transform(training_set)
     X_train = training_set[0:len(training_set)-1]
     y_train = training_set[1:len(training_set)]
     X_train = np.reshape(X_train, (len(X_train), 1, 1))
-
 
     # Making the predictions
     test_set = df_test.values
@@ -38,8 +37,6 @@ def send_data():
     inputs = np.reshape(inputs, (len(inputs), 1, 1))
     predicted_BTC_price = regressor.predict(inputs)
     predicted_BTC_price = sc.inverse_transform(predicted_BTC_price)
-    print(predicted_BTC_price)
-
 
     # Visualising the results
     plt.figure(figsize=(25,15), dpi=80, facecolor='w', edgecolor='k')
@@ -60,6 +57,41 @@ def send_data():
     plt.legend(loc=2, prop={'size': 25})
     plt.savefig("done.png")
 
-    return str(predicted_BTC_price)
+    return predicted_BTC_price.reshape(-1)
 
-send_data()
+def testdata(time = 30):
+    #Import libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.preprocessing import MinMaxScaler
+
+    # Import the dataset and encode the date
+    df = pd.read_csv('coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.csv')
+    df['date'] = pd.to_datetime(df['Timestamp'],unit='s').dt.date
+    group = df.groupby('date')
+    Real_Price = group['Weighted_Price'].mean()
+
+    # split data
+    prediction_days = int(time)
+    df_train= Real_Price[:len(Real_Price)-prediction_days]
+    df_test= Real_Price[len(Real_Price)-prediction_days:]
+
+    # Data preprocess
+    training_set = df_train.values
+    training_set = np.reshape(training_set, (len(training_set), 1))
+    sc = MinMaxScaler()
+    training_set = sc.fit_transform(training_set)
+    X_train = training_set[0:len(training_set)-1]
+    y_train = training_set[1:len(training_set)]
+    X_train = np.reshape(X_train, (len(X_train), 1, 1))
+
+    # Sending testing data
+    test_set = df_test.values
+    inputs = np.reshape(test_set, (len(test_set), 1))
+    inputs = sc.transform(inputs)
+    inputs = np.reshape(inputs, (len(inputs), 1, 1))
+    
+    return inputs.reshape(-1)
+    
+
+predictions(30)

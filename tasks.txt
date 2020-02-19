@@ -1,8 +1,27 @@
-To-do:
+To-do(now):
+---DEFAULTS PAGE
+- Make standard API calls for RNN(till VUE)
+    - Make a comparison API that sends comparison data and accuracy(USE a slider for test data limiter) and maybe the image
+        - [Sub-endpoint] Sends test data as an array
+        - [Sub-endpoint] Sends prediction data as an array
+    - Make a prediction only API that uses all the data as training data and predicts for 30 days after the data ends
+
+Problems
+ - [Prediction only API(DEFAULTS PAGE - RNN)] We want to make predictions 30 days after the data ends, but we are using testing data of 30 days to make the prediction??
+        - Tried to solve by removing the split and using all the data as train data(Did not work)
+        - Tried to solve by following -- https://towardsdatascience.com/time-series-prediction-beyond-test-data-3f4625019fd9 (Can't understand)
+
+To-do(at end):
+---PPT
+- Why we chose flask over django(Because we needed a lighweight server that we could test on very quickly. Django could have provided better security but we our focus was not security)
+
+---Functionality
 - Make so that users can upload their own datasets and models
 - Make a paid version
 - Deduct money for every successful run on the server
 
-Wishlist
-- Actually deploy on GCP or AWS
+Wishlist:
+- Actually deploy somewhere with Docker
 
+Notes:
+- I should be able to host this thing on heroku even with the configurable option as i would not be using any database to store the data and would only be uploading the data to the server as a csv file

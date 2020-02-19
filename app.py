@@ -20,8 +20,8 @@ def home():
 @app.route('/defaults')
 def run_script():
     return render_template('defaults.html')
-    #import send
-    #return send.send_data()
+    # import send
+    # return send.send_predictions(30) #30 for 30 days
 
 @app.route('/configurable', methods=['GET', 'POST'])
 def upload_file():
@@ -50,6 +50,16 @@ def upload_file():
       <input type=submit value=Upload>
     </form>
     '''
+@app.route('/test/<time>/', methods=['GET'])
+def test(time):
+    import send
+    import json
+    test_data = send.testdata(time)
+    prediction_data = send.predictions(time)
+    data = {}
+    data['test'] = test_data.tolist()
+    data['pred'] = prediction_data.tolist()
+    return json.dumps(data, indent=4)
 
 if __name__ == "__main__":
     app.run(debug=False,  port=8080)  
