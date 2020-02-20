@@ -1,10 +1,25 @@
 To-do(now):
----DEFAULTS PAGE
-- Make standard API calls for RNN(till VUE)
-    - Make a comparison API that sends comparison data and accuracy(USE a slider for test data limiter) and maybe the image
-        - [Sub-endpoint] Sends test data as an array
-        - [Sub-endpoint] Sends prediction data as an array
+---REFATOR CODE[In Progress]
+---HOME[Done]
+---DEFAULTS[In Progress]
+- Make standard API for RNN(till VUE)
+    - Make a comparison API that sends comparison data and accuracy(USE a slider for test data limiter) and maybe the image[Done]
+        - [Sub-endpoint] Sends test data as an array[Done]
+        - [Sub-endpoint] Sends prediction data as an array[Done]
     - Make a prediction only API that uses all the data as training data and predicts for 30 days after the data ends
+
+- Make standard API for ARIMA[Waiting for model]
+- Make standard API for LSTM[Waiting for model]
+
+---CONFIGURABLE PAGE
+- Make a test API for uploading any type of file in a directory from the server[Done]
+- Make API for uploading Models of R5 extensions
+- Make API for uploading your own datasets of csv format
+
+---MODELS
+    - Waiting for ARIMA
+    - Waiting for LSTM
+---
 
 Problems
  - [Prediction only API(DEFAULTS PAGE - RNN)] We want to make predictions 30 days after the data ends, but we are using testing data of 30 days to make the prediction??
@@ -20,8 +35,6 @@ To-do(at end):
 - Make a paid version
 - Deduct money for every successful run on the server
 
-Wishlist:
-- Actually deploy somewhere with Docker
 
 Notes:
 - I should be able to host this thing on heroku even with the configurable option as i would not be using any database to store the data and would only be uploading the data to the server as a csv file
