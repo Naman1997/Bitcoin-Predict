@@ -3,3 +3,6 @@ __pycache__/
 .ipynb_checkpoints/
 bitstampUSD_1-min_data_2012-01-01_to_2019-08-12.csv
 coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.csv
+predicting-btc-price-using-rnn.ipynb
+using-rnn-and-arima-to-predict-bitcoin-price.ipynb
+test-*.py
