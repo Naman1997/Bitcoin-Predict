@@ -1,20 +1,21 @@
+# First step, import libraries.
+import numpy as np
+import pandas as pd 
+import matplotlib
+from matplotlib import pyplot as plt
+from sklearn.preprocessing import MinMaxScaler
+import glob
+
+# Import the dataset and encode the date
+coin = glob.glob('coinbase*.csv')
+df = pd.read_csv(coin[0])
+df['date'] = pd.to_datetime(df['Timestamp'],unit='s').dt.date
+group = df.groupby('date')
+Real_Price = group['Weighted_Price'].mean()
+
 def predictions(time =30):
     from tensorflow import keras
-
     regressor = keras.models.load_model('RNN.h5')
-
-    # First step, import libraries.
-    import numpy as np
-    import pandas as pd 
-    import matplotlib
-    from matplotlib import pyplot as plt
-    from sklearn.preprocessing import MinMaxScaler
-
-    # Import the dataset and encode the date
-    df = pd.read_csv('coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.csv')
-    df['date'] = pd.to_datetime(df['Timestamp'],unit='s').dt.date
-    group = df.groupby('date')
-    Real_Price = group['Weighted_Price'].mean()
 
     # split data
     prediction_days = int(time)
@@ -39,37 +40,28 @@ def predictions(time =30):
     predicted_BTC_price = sc.inverse_transform(predicted_BTC_price)
 
     # Visualising the results
-    plt.figure(figsize=(25,15), dpi=80, facecolor='w', edgecolor='k')
-    ax = plt.gca()  
-    plt.plot(test_set, color = 'red', label = 'Real BTC Price')
-    plt.plot(predicted_BTC_price, color = 'blue', label = 'Predicted BTC Price')
-    plt.title('BTC Price Prediction', fontsize=40)
-    df_test = df_test.reset_index()
-    x=df_test.index
-    labels = df_test['date']
-    plt.xticks(x, labels, rotation = 'vertical')
-    for tick in ax.xaxis.get_major_ticks():
-        tick.label1.set_fontsize(18)
-    for tick in ax.yaxis.get_major_ticks():
-        tick.label1.set_fontsize(18)
-    plt.xlabel('Time', fontsize=40)
-    plt.ylabel('BTC Price(USD)', fontsize=40)
-    plt.legend(loc=2, prop={'size': 25})
-    plt.savefig("done.png")
+    # plt.figure(figsize=(25,15), dpi=80, facecolor='w', edgecolor='k')
+    # ax = plt.gca()  
+    # plt.plot(test_set, color = 'red', label = 'Real BTC Price')
+    # plt.plot(predicted_BTC_price, color = 'blue', label = 'Predicted BTC Price')
+    # plt.title('BTC Price Prediction', fontsize=40)
+    # df_test = df_test.reset_index()
+    # x=df_test.index
+    # labels = df_test['date']
+    # plt.xticks(x, labels, rotation = 'vertical')
+    # for tick in ax.xaxis.get_major_ticks():
+    #     tick.label1.set_fontsize(18)
+    # for tick in ax.yaxis.get_major_ticks():
+    #     tick.label1.set_fontsize(18)
+    # plt.xlabel('Time', fontsize=40)
+    # plt.ylabel('BTC Price(USD)', fontsize=40)
+    # plt.legend(loc=2, prop={'size': 25})
+    # plt.savefig("done.png")
+    dd = predicted_BTC_price.reshape(-1)
 
-    return predicted_BTC_price.reshape(-1)
+    return np.around(dd,2)
 
 def testdata(time = 30):
-    #Import libraries
-    import pandas as pd
-    import numpy as np
-    from sklearn.preprocessing import MinMaxScaler
-
-    # Import the dataset and encode the date
-    df = pd.read_csv('coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.csv')
-    df['date'] = pd.to_datetime(df['Timestamp'],unit='s').dt.date
-    group = df.groupby('date')
-    Real_Price = group['Weighted_Price'].mean()
 
     # split data
     prediction_days = int(time)
@@ -87,11 +79,9 @@ def testdata(time = 30):
 
     # Sending testing data
     test_set = df_test.values
-    inputs = np.reshape(test_set, (len(test_set), 1))
-    inputs = sc.transform(inputs)
-    inputs = np.reshape(inputs, (len(inputs), 1, 1))
-    
-    return inputs.reshape(-1)
+
+    return np.around(test_set,2)
     
 
-predictions(30)
+print(predictions(30))
+print(testdata(30))

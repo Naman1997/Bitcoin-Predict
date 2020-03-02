@@ -19,7 +19,6 @@ To-do(now):
 ---MODELS
     - Waiting for ARIMA
     - Waiting for LSTM
----
 
 Problems
  - [Prediction only API(DEFAULTS PAGE - RNN)] We want to make predictions 30 days after the data ends, but we are using testing data of 30 days to make the prediction??
