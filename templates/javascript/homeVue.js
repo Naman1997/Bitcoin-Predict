@@ -7,6 +7,7 @@ var app = new Vue({
     },
     created: function(){
         this.getResult();
+        this.con();
     },
     methods: {
         getResultRNN(time){
@@ -24,6 +25,9 @@ var app = new Vue({
                 console.log(dict);
 
             });
+        },
+        con(){
+            console.log("HEYYYYYYYYYYYYYY");
         },
     }
 });

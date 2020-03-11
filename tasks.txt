@@ -2,6 +2,7 @@ To-do(now):
 ---REFATOR CODE[In Progress]
 ---HOME[Done]
 ---DEFAULTS[In Progress]
+- Calling RNN API on frontend (working) - Karan 
 - Make standard API for RNN(till VUE)
     - Make a comparison API that sends comparison data and accuracy(USE a slider for test data limiter) and maybe the image[Done]
         - [Sub-endpoint] Sends test data as an array[Done]
@@ -12,6 +13,7 @@ To-do(now):
 - Make standard API for LSTM[Waiting for model]
 
 ---CONFIGURABLE PAGE
+- Adding css to the webpage (working) - Karan
 - Make a test API for uploading any type of file in a directory from the server[Done]
 - Make API for uploading Models of R5 extensions
 - Make API for uploading your own datasets of csv format
