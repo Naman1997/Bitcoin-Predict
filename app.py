@@ -1,4 +1,5 @@
 import os
+from flask_cors import CORS, cross_origin
 from flask import Flask, flash, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
 
@@ -7,7 +8,9 @@ UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
+cors = CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -51,6 +54,7 @@ def upload_file():
     </form>
     '''
 @app.route('/test/<time>/', methods=['GET'])
+@cross_origin()
 def test(time):
     import send
     import json
