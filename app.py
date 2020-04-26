@@ -56,8 +56,8 @@ def upload_file():
     '''
 @app.route('/RNN/<time>/', methods=['GET'])
 def RNN(time):
-    test_data = send.RNNtestdata(time)
-    prediction_data = send.RNNpredictions(time)
+    test_data = send.RNNtestdata(int(time))
+    prediction_data = send.RNNpredictions(int(time))
     data = {}
     data['test'] = test_data.tolist()
     data['pred'] = prediction_data.tolist()
@@ -65,12 +65,8 @@ def RNN(time):
 
 @app.route('/LR/<time>/', methods=['GET'])
 def LR(time):
-    total_data = send.LRpredictions(time)
-    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    print(total_data)
-    print()
-    test_data = total_data[0]
-    prediction_data = total_data[1]
+    test_data = send.LRtest(int(time))
+    prediction_data = send.LRpredictions(int(time))
     data = {}
     data['test'] = test_data
     data['pred'] = prediction_data

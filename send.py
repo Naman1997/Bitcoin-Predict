@@ -24,7 +24,7 @@ def RNNpredictions(time =30):
     regressor = keras.models.load_model('RNN.h5')
 
     # split data
-    prediction_days = int(time)
+    prediction_days = time
     df_train= Real_Price[:len(Real_Price)-prediction_days]
     df_test= Real_Price[len(Real_Price)-prediction_days:]
 
@@ -70,7 +70,7 @@ def RNNpredictions(time =30):
 def RNNtestdata(time = 30):
 
     # split data
-    prediction_days = int(time)
+    prediction_days = time
     df_train= Real_Price[:len(Real_Price)-prediction_days]
     df_test= Real_Price[len(Real_Price)-prediction_days:]
 
