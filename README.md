@@ -10,6 +10,11 @@ Models currently working:
 Get data sources from:
 [HERE](https://www.kaggle.com/mczielinski/bitcoin-historical-data)
 
+## To run the project
+
+$ sudo docker run -p 8080:8080 namanarora/fyp2020:latest
+then go to
+http://localhost:8080/defaults
 
 ### TODO
 
