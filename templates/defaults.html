@@ -118,105 +118,93 @@
 
 <script type="text/javascript" defer>
 
-  // http://127.0.0.1:8080/test/30/
-
 var app = new Vue({
-    el: '#app',
-    data: { 
-        message: "Hello world",
-        dict:{}
-    },
-    created: function(){
+  el: '#app',
+  data: {
+   message: "Hello world",
+   dict: {}
+  },
+  created: function() {},
+  methods: {
+   getResultRNN(time) {
+    axios.get('http://127.0.0.1:8080/RNN/' + time).then(response => {
+     var incoming = response.data;
+     var len = incoming.length;
+     var dict = {};
 
-        
-    },          
-    methods: {  
-        getResultRNN(time){
-            axios.get('http://127.0.0.1:8080/RNN/'+time).then(response =>{
-                var incoming = response.data;
-                var len = incoming.length;
-                var dict = {};
+     var keys = Object.keys(incoming);
+     var values = Object.values(incoming);
+     var kar = Object.values(incoming);
+     for (i = 0; i < incoming.length; i++) {
+      dict[i] = incoming[i];
+     }
 
-                var keys = Object.keys(incoming);
-                var values = Object.values(incoming);
-                var kar=Object.values(incoming);
-                for(i=0; i<incoming.length;i++){
-                        dict[i] = incoming[i];
-                }
-                
-                this.dict = dict;
-                
-                
-                console.log(incoming);
-                console.log(keys);
-                console.log(values);
-                
-                var array_1=incoming[keys[0]];
-                var array_2=incoming[keys[1]];
-             
-                
-                var dataArray=array_1;
-                var dataArray_1=array_2;
-          // var dataArray = [10,13,18,20,17,10,13,18,20,17,20,17,10,13,18,10,13,18,27,13,18,27,20,17,15,19,29,31,25,10];
+     this.dict = dict;
 
-          var dps = [];   //dataPoints. 
-          var dps_1=[]
-         
-   
-	 var chart = new CanvasJS.Chart("chartContainer",{
-        animationEnabled: true,
-      	title :{
-      		text: "RNN Prediction Model"
-      	},
-      	axisX: {						
-      		title: "Axis X Title"
-      	},
-      	axisY: {						
-      		title: "Units"
-      	},
-      	data: [{
-      		type: "line",
-      		dataPoints : dps
-          
-        },
-      {
-        type:"line",
-        dataPoints:dps_1
-        
-      }]
-      });
+     console.log(incoming);
+     console.log(keys);
+     console.log(values);
 
+     var array_1 = incoming[keys[0]];
+     var array_2 = incoming[keys[1]];
 
-     function parseDataPoints () {
-        for (var i = 0; i <= dataArray.length; i++){
-          dps.push({y: dataArray[i]});    
-          dps_1.push({y:dataArray_1[i]});
-        }
+     var dataArray = array_1;
+     var dataArray_1 = array_2;
+     // var dataArray = [10,13,18,20,17,10,13,18,20,17,20,17,10,13,18,10,13,18,27,13,18,27,20,17,15,19,29,31,25,10];
+
+     var dps = []; //dataPoints. 
+     var dps_1 = []
+
+     var chart = new CanvasJS.Chart("chartContainer", {
+      animationEnabled: true,
+      title: {
+       text: "RNN Prediction Model"
+      },
+      axisX: {
+       title: "Axis X Title"
+      },
+      axisY: {
+       title: "Units"
+      },
+      data: [{
+        type: "line",
+        dataPoints: dps
+
+       },
+       {
+        type: "line",
+        dataPoints: dps_1
+
+       }
+      ]
+     });
+
+     function parseDataPoints() {
+      for (var i = 0; i <= dataArray.length; i++) {
+       dps.push({
+        y: dataArray[i]
+       });
+       dps_1.push({
+        y: dataArray_1[i]
+       });
+      }
      };
 
-  
-   		
-   	 parseDataPoints();
+     parseDataPoints();
      chart.options.data[0].dataPoints = dps;
      chart.options.data[1].dataPoints = dps_1;
 
-   
-
-
      chart.render();
-              
-            }); 
-        },      
+    });
+   },
 
 
-        con(){  
-                console.log("Button clicked");
-        },
-        
+   con() {
+    console.log("Button clicked");
+   },
 
-        
-    }           
-});
+  }
+ });
 
 
   </script>
