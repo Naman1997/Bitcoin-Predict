@@ -5,15 +5,21 @@ import matplotlib
 from matplotlib import pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 import glob
-
+from sklearn import linear_model
 # Import the dataset and encode the date
+
+# RNN
 coin = glob.glob('coinbase*.csv')
 df = pd.read_csv(coin[0])
 df['date'] = pd.to_datetime(df['Timestamp'],unit='s').dt.date
 group = df.groupby('date')
 Real_Price = group['Weighted_Price'].mean()
 
-def predictions(time =30):
+#Linear Regression
+dados = pd.read_csv('bitstampUSD_1-min_data_2012-01-01_to_2019-08-12.csv',',').dropna()
+dados
+
+def RNNpredictions(time =30):
     from tensorflow import keras
     regressor = keras.models.load_model('RNN.h5')
 
@@ -61,7 +67,7 @@ def predictions(time =30):
 
     return np.around(dd,2)
 
-def testdata(time = 30):
+def RNNtestdata(time = 30):
 
     # split data
     prediction_days = int(time)
@@ -82,6 +88,22 @@ def testdata(time = 30):
 
     return np.around(test_set,2)
     
+def LRpredictions(time =30):
+    x = dados[['Timestamp']]
+    y = dados['Weighted_Price']
+    modelo=linear_model.LinearRegression()
+    modelo.fit(x, y)
+    return modelo.predict(x).ravel().tolist()[-time:]
 
-print(predictions(30))
-print(testdata(30))
+def LRtest(time =30):
+    x = dados[['Timestamp']]
+    y = dados['Weighted_Price']
+    return x.tail(time).values.reshape(-1).tolist()
+
+
+# print(RNNpredictions(30))
+# print(RNNtestdata(30))
+# print()
+print("Linear Regression")
+print(LRpredictions(30)[1])
+print("END")

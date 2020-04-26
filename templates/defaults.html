@@ -132,7 +132,7 @@ var app = new Vue({
     },          
     methods: {  
         getResultRNN(time){
-            axios.get('http://127.0.0.1:8080/test/'+time).then(response =>{
+            axios.get('http://127.0.0.1:8080/RNN/'+time).then(response =>{
                 var incoming = response.data;
                 var len = incoming.length;
                 var dict = {};

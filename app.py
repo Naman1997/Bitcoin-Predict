@@ -3,6 +3,8 @@ import os
 from flask import Flask, flash, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
+import send
+import json
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -52,16 +54,28 @@ def upload_file():
       <input type=submit value=Upload>
     </form>
     '''
-@app.route('/test/<time>/', methods=['GET'])
-def test(time):
-    import send
-    import json
-    test_data = send.testdata(time)
-    prediction_data = send.predictions(time)
+@app.route('/RNN/<time>/', methods=['GET'])
+def RNN(time):
+    test_data = send.RNNtestdata(time)
+    prediction_data = send.RNNpredictions(time)
     data = {}
     data['test'] = test_data.tolist()
     data['pred'] = prediction_data.tolist()
     return json.dumps(data, indent=4)
+
+@app.route('/LR/<time>/', methods=['GET'])
+def LR(time):
+    total_data = send.LRpredictions(time)
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    print(total_data)
+    print()
+    test_data = total_data[0]
+    prediction_data = total_data[1]
+    data = {}
+    data['test'] = test_data
+    data['pred'] = prediction_data
+    return json.dumps(data, indent=4)
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=8080)  
