@@ -106,7 +106,7 @@
     </li>
     <li>
       <h3>LSTM</h3>
-      <button v-on:click = " con()">Click Once</button>
+      <button v-on:click = " getResultLR(30)">Click Once</button>
     </li>
   </ul>
 </div>
@@ -122,7 +122,8 @@ var app = new Vue({
   el: '#app',
   data: {
    message: "Hello world",
-   dict: {}
+   dictRNN: {},
+   dictLR: {}
   },
   created: function() {},
   methods: {
@@ -130,16 +131,16 @@ var app = new Vue({
     axios.get('http://127.0.0.1:8080/RNN/' + time).then(response => {
      var incoming = response.data;
      var len = incoming.length;
-     var dict = {};
+     var dictRNN = {};
 
      var keys = Object.keys(incoming);
      var values = Object.values(incoming);
      var kar = Object.values(incoming);
      for (i = 0; i < incoming.length; i++) {
-      dict[i] = incoming[i];
+      dictRNN[i] = incoming[i];
      }
 
-     this.dict = dict;
+     this.dictRNN = dictRNN;
 
      console.log(incoming);
      console.log(keys);
@@ -199,8 +200,76 @@ var app = new Vue({
    },
 
 
-   con() {
-    console.log("Button clicked");
+   getResultLR(time) {
+    axios.get('http://127.0.0.1:8080/LR/' + time).then(response => {
+     var incoming = response.data;
+     var len = incoming.length;
+     var dictLR = {};
+
+     var keys = Object.keys(incoming);
+     var values = Object.values(incoming);
+     var kar = Object.values(incoming);
+     for (i = 0; i < incoming.length; i++) {
+      dictLR[i] = incoming[i];
+     }
+
+     this.dictLR = dictLR;
+
+     console.log(incoming);
+     console.log(keys);
+     console.log(values);
+
+     var array_1 = incoming[keys[0]];
+     var array_2 = incoming[keys[1]];
+
+     var dataArray = array_1;
+     var dataArray_1 = array_2;
+     // var dataArray = [10,13,18,20,17,10,13,18,20,17,20,17,10,13,18,10,13,18,27,13,18,27,20,17,15,19,29,31,25,10];
+
+     var dps = []; //dataPoints. 
+     var dps_1 = []
+
+     var chart = new CanvasJS.Chart("chartContainer", {
+      animationEnabled: true,
+      title: {
+       text: "LR Prediction Model"
+      },
+      axisX: {
+       title: "Axis X Title"
+      },
+      axisY: {
+       title: "Units"
+      },
+      data: [{
+        type: "line",
+        dataPoints: dps
+
+       },
+       {
+        type: "line",
+        dataPoints: dps_1
+
+       }
+      ]
+     });
+
+     function parseDataPoints() {
+      for (var i = 0; i <= dataArray.length; i++) {
+       dps.push({
+        y: dataArray[i]
+       });
+       dps_1.push({
+        y: dataArray_1[i]
+       });
+      }
+     };
+
+     parseDataPoints();
+     chart.options.data[0].dataPoints = dps;
+     chart.options.data[1].dataPoints = dps_1;
+
+     chart.render();
+    });
    },
 
   }
