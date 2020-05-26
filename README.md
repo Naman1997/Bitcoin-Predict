@@ -15,10 +15,3 @@ Get data sources from:
 $ sudo docker run -p 8080:8080 namanarora/fyp2020:latest
 then go to
 http://localhost:8080/defaults
-
-### TODO
-
-  - Create docker container
-  - Fix canvasJS scaling issues
-  - Imporve UI
-  - Fix custom model implementation
