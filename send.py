@@ -15,6 +15,7 @@ from itertools import product
 import seaborn as sns
 import warnings
 from sklearn import preprocessing
+import pickle
 # Import the dataset and encode the date
 
 # RNN
@@ -132,36 +133,12 @@ def SARIMApred(time =30):
     df['Timestamp'] = pd.to_datetime(df['Timestamp'], unit = 's')
     df.set_index('Timestamp', inplace=True)
     df = df.resample('D').mean()
-    df1 = df.iloc[:-30]
-    df1['diff1'] = df1['Weighted_Price'] - df1['Weighted_Price'].shift(30)
-    Q = range(0,2)
-    q = range(0,2)
-    P = range(0,2)
-    p = range(0,2)
-    D = 1
-    d = 1
-    parameters = product(p,q, P, Q)
-    parameters_list = list(parameters)
-    len(parameters_list)
-
-    res = []
-    ai = float("inf")
-    warnings.filterwarnings('ignore')
-    for param in parameters_list:
-        try:
-            model = sm.tsa.statespace.SARIMAX(df1['Weighted_Price'], order = (param[0], d, param[1]),
-                                            seasonal_order = (param[2], D, param[3], 12)).fit(disp = -1)
-        except ValueError:
-            continue
-        aic = model.aic
-        if aic < ai:
-            ml = model
-            ai = aic
-            para = param
-        res.append([param, model.aic])
+    df1 = df.iloc[:-time]
+    filename = 'Sarima.pickle'
+    loaded = pickle.load(open(filename, 'rb'))
     start = len(df1.axes[0])
     end = start + time -1
-    df3 = ml.predict(start = start, end = end)
+    df3 = loaded.predict(start = start, end = end)
     return df3.to_list()
 
 
