@@ -4,4 +4,3 @@ scipy
 statsmodels
 more-itertools
 seaborn
-pickle
