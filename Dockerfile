@@ -12,4 +12,5 @@ RUN pip3 install tensorflow && \
     pip3 install opencv-python && \
     pip3 install imutils
 COPY . .
+RUN pip3 install -r req-2.txt
 CMD python3 app.py

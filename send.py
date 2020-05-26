@@ -6,6 +6,15 @@ from matplotlib import pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 import glob
 from sklearn import linear_model
+from datetime import datetime, date
+import pmdarima as pm
+from scipy import stats
+from statsmodels.tsa.arima_model import ARIMA
+import statsmodels.api as sm
+from itertools import product
+import seaborn as sns
+import warnings
+from sklearn import preprocessing
 # Import the dataset and encode the date
 
 # RNN
@@ -16,8 +25,8 @@ group = df.groupby('date')
 Real_Price = group['Weighted_Price'].mean()
 
 #Linear Regression
-dados = pd.read_csv('bitstampUSD_1-min_data_2012-01-01_to_2019-08-12.csv',',').dropna()
-dados
+# dados = pd.read_csv('coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.csv',',').dropna()
+# dados
 
 def RNNpredictions(time =30):
     from tensorflow import keras
@@ -89,21 +98,77 @@ def RNNtestdata(time = 30):
     return np.around(test_set,2)
     
 def LRpredictions(time =30):
-    x = dados[['Timestamp']]
-    y = dados['Weighted_Price']
-    modelo=linear_model.LinearRegression()
-    modelo.fit(x, y)
-    return modelo.predict(x).ravel().tolist()[-time:]
+  df = pd.read_csv("coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.csv",delimiter= ',')
+  df['Timestamp'] = pd.to_datetime(df['Timestamp'], unit = 's')
+  df.set_index('Timestamp', inplace=True)
+  df = df.resample('D').mean().dropna()
+  df.reset_index(inplace = True)
+  le = preprocessing.LabelEncoder()
+  le.fit(df['Timestamp'])
+  x = le.transform(df['Timestamp']).reshape(-1,1)
+  y = df['Weighted_Price'].to_list()
+  modelo=linear_model.LinearRegression()
+  modelo.fit(x, y)
+  return modelo.predict(x).ravel().tolist()[-time:]
 
 def LRtest(time =30):
-    x = dados[['Timestamp']]
-    y = dados['Weighted_Price']
-    return x.tail(time).values.reshape(-1).tolist()
+  df = pd.read_csv("coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.csv",delimiter= ',')
+  df['Timestamp'] = pd.to_datetime(df['Timestamp'], unit = 's')
+  df.set_index('Timestamp', inplace=True)
+  df = df.resample('D').mean().dropna()
+  x = df['Weighted_Price'][-time:].to_list()
+  return x
+
+def SARIMAtest(time =30):
+    df = pd.read_csv("coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.csv",delimiter= ',')
+    df['Timestamp'] = pd.to_datetime(df['Timestamp'], unit = 's')
+    df.set_index('Timestamp', inplace=True)
+    df = df.resample('D').mean()
+    df4 = df['Weighted_Price'][-time:]
+    return df4.to_list()
+
+def SARIMApred(time =30):
+    df = pd.read_csv("coinbaseUSD_1-min_data_2014-12-01_to_2019-01-09.csv",delimiter= ',')
+    df['Timestamp'] = pd.to_datetime(df['Timestamp'], unit = 's')
+    df.set_index('Timestamp', inplace=True)
+    df = df.resample('D').mean()
+    df1 = df.iloc[:-30]
+    df1['diff1'] = df1['Weighted_Price'] - df1['Weighted_Price'].shift(30)
+    Q = range(0,2)
+    q = range(0,2)
+    P = range(0,2)
+    p = range(0,2)
+    D = 1
+    d = 1
+    parameters = product(p,q, P, Q)
+    parameters_list = list(parameters)
+    len(parameters_list)
+
+    res = []
+    ai = float("inf")
+    warnings.filterwarnings('ignore')
+    for param in parameters_list:
+        try:
+            model = sm.tsa.statespace.SARIMAX(df1['Weighted_Price'], order = (param[0], d, param[1]),
+                                            seasonal_order = (param[2], D, param[3], 12)).fit(disp = -1)
+        except ValueError:
+            continue
+        aic = model.aic
+        if aic < ai:
+            ml = model
+            ai = aic
+            para = param
+        res.append([param, model.aic])
+    start = len(df1.axes[0])
+    end = start + time -1
+    df3 = ml.predict(start = start, end = end)
+    return df3.to_list()
+
 
 
 # print(RNNpredictions(30))
 # print(RNNtestdata(30))
 # print()
-print("Linear Regression")
-print(LRpredictions(30)[1])
-print("END")
+# print("Linear Regression")
+# print(LRpredictions(30)[1])
+# print("END")

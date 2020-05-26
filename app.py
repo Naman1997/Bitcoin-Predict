@@ -72,6 +72,15 @@ def LR(time):
     data['pred'] = prediction_data
     return json.dumps(data, indent=4)
 
+@app.route('/SARIMA/<time>', methods=['GET'])
+def SARIMA(time):
+    test_data = send.SARIMAtest(int(time))
+    prediction_data = send.SARIMApred(int(time))
+    data = {}
+    data['test'] = test_data
+    data['pred'] = prediction_data
+    return json.dumps(data, indent=4)
+
 
 if __name__ == "__main__":
     app.run(host= '0.0.0.0', debug=True, port=8080)  

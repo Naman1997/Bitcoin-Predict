@@ -96,8 +96,8 @@
 
   <ul>
     <li>
-      <h3>ARIMA</h3> 
-    <button> Click me!</button>
+      <h3>SARIMA</h3> 
+    <button v-on:click = " getResultSARIMA(30)">Click Once</button>
   </li>
     <li>
       <h3>RNN</h3>
@@ -105,7 +105,7 @@
        <div id="chartContainer" style="height: 300px; width: 100%;"></div>
     </li>
     <li>
-      <h3>LSTM</h3>
+      <h3>LR</h3>
       <button v-on:click = " getResultLR(30)">Click Once</button>
     </li>
   </ul>
@@ -123,7 +123,8 @@ var app = new Vue({
   data: {
    message: "Hello world",
    dictRNN: {},
-   dictLR: {}
+   dictLR: {},
+   dictSARIMA: {}
   },
   created: function() {},
   methods: {
@@ -233,6 +234,78 @@ var app = new Vue({
       animationEnabled: true,
       title: {
        text: "LR Prediction Model"
+      },
+      axisX: {
+       title: "Axis X Title"
+      },
+      axisY: {
+       title: "Units"
+      },
+      data: [{
+        type: "line",
+        dataPoints: dps
+
+       },
+       {
+        type: "line",
+        dataPoints: dps_1
+
+       }
+      ]
+     });
+
+     function parseDataPoints() {
+      for (var i = 0; i <= dataArray.length; i++) {
+       dps.push({
+        y: dataArray[i]
+       });
+       dps_1.push({
+        y: dataArray_1[i]
+       });
+      }
+     };
+
+     parseDataPoints();
+     chart.options.data[0].dataPoints = dps;
+     chart.options.data[1].dataPoints = dps_1;
+
+     chart.render();
+    });
+   },
+   
+   getResultSARIMA(time) {
+    axios.get('http://127.0.0.1:8080/SARIMA/' + time).then(response => {
+     var incoming = response.data;
+     var len = incoming.length;
+     var dictSARIMA = {};
+
+     var keys = Object.keys(incoming);
+     var values = Object.values(incoming);
+     var kar = Object.values(incoming);
+     for (i = 0; i < incoming.length; i++) {
+      dictSARIMA[i] = incoming[i];
+     }
+
+     this.dictSARIMA = dictSARIMA;
+
+     console.log(incoming);
+     console.log(keys);
+     console.log(values);
+
+     var array_1 = incoming[keys[0]];
+     var array_2 = incoming[keys[1]];
+
+     var dataArray = array_1;
+     var dataArray_1 = array_2;
+     // var dataArray = [10,13,18,20,17,10,13,18,20,17,20,17,10,13,18,10,13,18,27,13,18,27,20,17,15,19,29,31,25,10];
+
+     var dps = []; //dataPoints. 
+     var dps_1 = []
+
+     var chart = new CanvasJS.Chart("chartContainer", {
+      animationEnabled: true,
+      title: {
+       text: "SARIMA Prediction Model"
       },
       axisX: {
        title: "Axis X Title"
