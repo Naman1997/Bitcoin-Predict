@@ -1,6 +1,6 @@
 # Bitcoin-Predict
 ##### Project is currently under development
-![Docker](https://github.com/Naman1997/Bitcoin-Predict/workflows/Docker/badge.svg)
+[![Docker](https://github.com/Naman1997/Bitcoin-Predict/actions/workflows/dockerpublish.yml/badge.svg)](https://github.com/Naman1997/Bitcoin-Predict/actions/workflows/dockerpublish.yml)
 
 Predict bitcoin valuation from older data.
 Models currently working:
