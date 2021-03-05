@@ -1,9 +1,9 @@
 FROM tensorflow/tensorflow
+RUN apt-get install python3.7
 RUN apt-get clean
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get upgrade && apt-get install -y \
     python3-pip
 RUN mkdir -p app
-RUN apt-get install --only-upgrade python3
 RUN python3 -m pip install -U pip
 COPY requirements.txt /app
 WORKDIR /app
