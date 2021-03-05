@@ -1,7 +1,7 @@
 FROM tensorflow/tensorflow
 RUN apt-get install -y python3.7
 RUN apt-get clean
-RUN apt-get update && apt-get upgrade && apt-get install -y \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
     python3-pip
 RUN mkdir -p app
 RUN python3 -m pip install -U pip
